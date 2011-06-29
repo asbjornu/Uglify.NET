@@ -1,0 +1,2 @@
+﻿This directory only exists to have a place in which to add the linked and embedded UglifyJS files.
+Since the files are physically placed in ~/lib/UglifyJS/ and only linked here, this folder is empty.
