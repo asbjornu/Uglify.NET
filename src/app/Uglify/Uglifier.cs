@@ -1,8 +1,6 @@
 using System;
 
-using IronJS;
 using IronJS.Hosting;
-using IronJS.Native;
 
 namespace Uglify
 {
@@ -35,10 +33,8 @@ namespace Uglify
       {
          var context = new CSharp.Context();
          var requirer = new Requirer(context, resourceHelper);
-         var require = Utils.createHostFunction<Func<string, CommonObject>>(
-            context.Environment, requirer.Require);
 
-         context.SetGlobal("require", require);
+         context.SetGlobal("require", requirer.Require);
 
          return context;
       }
