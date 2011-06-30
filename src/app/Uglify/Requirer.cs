@@ -105,7 +105,7 @@ namespace Uglify
                var exports = {};",
                code,
                // End the whole thing with a semicolon, just to be safe.
-               ";");
+               "exports;");
 
             var result = Execute(file, code);
             this.objectCache.Add(file, result);

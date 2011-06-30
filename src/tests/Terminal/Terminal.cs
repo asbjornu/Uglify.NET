@@ -9,8 +9,11 @@ namespace Uglify.Terminal
       {
          try
          {
+            Console.WriteLine("Loading..");
             Uglifier uglifier = new Uglifier();
-            uglifier.Uglify(String.Empty);
+            Console.WriteLine("Uglify executed!");
+
+            uglifier.Uglify("var asdfg = 1234;");
          }
          catch (TargetInvocationException exception)
          {
