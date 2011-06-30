@@ -1,1 +1,6 @@
 /_ReSharper.Uglify.NET/
+/**/_ReSharper.Uglify.NET/
+bin/
+obj/
+*.suo
+*.user
