@@ -1,1 +1,4 @@
-/_ReSharper.Uglify.NET/
+*.user
+*.suo
+bin/
+obj/
