@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uglify.Core", "app\Uglify\Uglify.Core.csproj", "{0328E02D-353C-45B8-8F89-9FBAE46E937A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uglify.Tests", "tests\Tests\Uglify.Tests.csproj", "{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,12 +41,23 @@ Global
 		{0328E02D-353C-45B8-8F89-9FBAE46E937A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0328E02D-353C-45B8-8F89-9FBAE46E937A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0328E02D-353C-45B8-8F89-9FBAE46E937A}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3E45C27A-69C0-407F-B12D-E521C5207731} = {2D423284-69CD-4F45-A10E-F39D0B8CC8F1}
+		{0DA802C4-CBE9-453A-8E2F-66B33C27CE5F} = {2D423284-69CD-4F45-A10E-F39D0B8CC8F1}
 		{0328E02D-353C-45B8-8F89-9FBAE46E937A} = {634FE084-7017-430C-A1D5-965A631FF753}
 	EndGlobalSection
 EndGlobal
