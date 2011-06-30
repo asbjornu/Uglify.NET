@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Uglify.Terminal
 {
@@ -10,6 +11,10 @@ namespace Uglify.Terminal
          {
             Uglifier uglifier = new Uglifier();
             uglifier.Uglify(String.Empty);
+         }
+         catch (TargetInvocationException exception)
+         {
+            Console.WriteLine(exception.InnerException);
          }
          catch (Exception exception)
          {
