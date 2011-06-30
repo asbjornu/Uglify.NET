@@ -1,3 +1,0 @@
-[submodule "lib/UglyJS"]
-path = lib/UglyJS
-url = git@github.com:bondehagen/UglifyJS.git
