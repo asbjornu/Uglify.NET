@@ -76,8 +76,13 @@ namespace Uglify
       }
 
 
-      private CommonObject RequireAndAddToCache(string file)
+      private CommonObject RequireInternal(string file)
       {
+         if (String.IsNullOrEmpty(file))
+            throw new ArgumentNullException("file");
+
+         file = Normalize(file);
+
          // Check for existence so we can return fast without locking.
          if (this.objectCache.ContainsKey(file))
             return this.objectCache[file];
@@ -106,17 +111,6 @@ namespace Uglify
             this.objectCache.Add(file, result);
             return result;
          }
-      }
-
-
-      private CommonObject RequireInternal(string file)
-      {
-         if (String.IsNullOrEmpty(file))
-            throw new ArgumentNullException("file");
-
-         file = Normalize(file);
-
-         return RequireAndAddToCache(file);
       }
    }
 }
