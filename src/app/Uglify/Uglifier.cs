@@ -4,12 +4,18 @@ using IronJS.Hosting;
 
 namespace Uglify
 {
+   /// <summary>
+   /// The main Uglify object.
+   /// </summary>
    public class Uglifier
    {
       private readonly CSharp.Context context;
       private readonly ResourceHelper resourceHelper;
 
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Uglifier"/> class.
+      /// </summary>
       public Uglifier()
       {
          this.resourceHelper = new ResourceHelper();
@@ -17,6 +23,13 @@ namespace Uglify
       }
 
 
+      /// <summary>
+      /// Uglifies the specified code.
+      /// </summary>
+      /// <param name="code">The code.</param>
+      /// <returns>
+      /// The uglified code.
+      /// </returns>
       public string Uglify(string code)
       {
          if (code == null)
@@ -29,6 +42,13 @@ namespace Uglify
       }
 
 
+      /// <summary>
+      /// Sets up the context.
+      /// </summary>
+      /// <param name="resourceHelper">The resource helper.</param>
+      /// <returns>
+      /// The context.
+      /// </returns>
       private static CSharp.Context SetupContext(ResourceHelper resourceHelper)
       {
          var context = new CSharp.Context();
