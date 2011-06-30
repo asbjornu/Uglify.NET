@@ -63,6 +63,19 @@ namespace Uglify
       }
 
 
+      private CommonObject Execute(string file, string code)
+      {
+         try
+         {
+            return this.context.Execute<CommonObject>(code);
+         }
+         catch (Exception exception)
+         {
+            throw new RequireException(file, exception);
+         }
+      }
+
+
       private CommonObject RequireAndAddToCache(string file)
       {
          // Check for existence so we can return fast without locking.
@@ -89,17 +102,7 @@ namespace Uglify
                // End the whole thing with a semicolon, just to be safe.
                ";");
 
-            CommonObject result;
-
-            try
-            {
-               result = this.context.Execute<CommonObject>(code);
-            }
-            catch (Exception exception)
-            {
-               throw new RequireException(file, exception);
-            }
-
+            var result = Execute(file, code);
             this.objectCache.Add(file, result);
             return result;
          }
