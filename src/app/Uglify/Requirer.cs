@@ -55,7 +55,7 @@ namespace Uglify
 
          if (lastSlashIndex == -1)
             return file;
-         
+
          // We don't want the slash itself, so increase index with 1.
          lastSlashIndex++;
 
@@ -89,7 +89,17 @@ namespace Uglify
                // End the whole thing with a semicolon, just to be safe.
                ";");
 
-            var result = this.context.Execute<CommonObject>(code);
+            CommonObject result;
+
+            try
+            {
+               result = this.context.Execute<CommonObject>(code);
+            }
+            catch (Exception exception)
+            {
+               throw new RequireException(file, exception);
+            }
+
             this.objectCache.Add(file, result);
             return result;
          }

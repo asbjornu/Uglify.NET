@@ -1,5 +1,6 @@
 using System;
 
+using IronJS;
 using IronJS.Hosting;
 
 namespace Uglify
@@ -26,7 +27,7 @@ namespace Uglify
       /// <summary>
       /// Uglifies the specified code.
       /// </summary>
-      /// <param name="code">The code.</param>
+      /// <param name="code">The JavaScript code that is to be uglified.</param>
       /// <returns>
       /// The uglified code.
       /// </returns>
@@ -36,7 +37,7 @@ namespace Uglify
             throw new ArgumentNullException("code");
 
          string uglifyCode = this.resourceHelper.Get("uglify-js.js");
-         var x = this.context.Execute(uglifyCode);
+         var x = this.context.Execute<CommonObject>(uglifyCode);
 
          return code;
       }
