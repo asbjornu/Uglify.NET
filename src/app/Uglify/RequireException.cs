@@ -1,15 +1,5 @@
-#region License
-
-// --------------------------------------------------
-// Copyright © 2003-2011 OKB. All Rights Reserved.
-// 
-// This software is proprietary information of OKB.
-// USE IS SUBJECT TO LICENSE TERMS.
-// --------------------------------------------------
-
-#endregion
-
 using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Uglify
@@ -26,7 +16,7 @@ namespace Uglify
       /// <param name="file">The file.</param>
       /// <param name="innerException">The inner exception.</param>
       public RequireException(string file, Exception innerException)
-         : base(CreateMessage(file), innerException)
+         : base(CreateMessage(file), TraverseException(innerException))
       {
       }
 
@@ -44,9 +34,20 @@ namespace Uglify
       {
       }
 
+
       private static string CreateMessage(string file)
       {
          return String.Format("An error occurred while requiring '{0}'.", file);
+      }
+
+
+      private static Exception TraverseException(Exception exception)
+      {
+         return (exception != null)
+                && (exception is TargetInvocationException)
+                && (exception.InnerException != null)
+                   ? exception.InnerException
+                   : exception;
       }
    }
 }
