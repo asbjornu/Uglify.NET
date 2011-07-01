@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 using IronJS;
 using IronJS.Hosting;
@@ -14,6 +15,7 @@ namespace Uglify
    {
       private readonly CSharp.Context context;
       private readonly IDictionary<string, CommonObject> objectCache;
+      private readonly ReaderWriterLockSlim cacheLock;
       private readonly FunctionObject require;
       private readonly ResourceHelper resourceHelper;
 
@@ -34,6 +36,7 @@ namespace Uglify
          this.context = context;
          this.resourceHelper = resourceHelper;
          this.objectCache = new Dictionary<string, CommonObject>();
+         this.cacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
          this.require = Utils.CreateFunction<Func<string, CommonObject>>(this.context.Environment, 1, RequireInternal);
          this.context.SetGlobal("require", this.require);
       }
@@ -87,28 +90,42 @@ namespace Uglify
 
          file = Normalize(file);
 
-         // Check for existence so we can return fast without locking.
-         if (this.objectCache.ContainsKey(file))
-            return this.objectCache[file];
+         CommonObject exports;
 
-         // Lock to make thread-safe.
-         lock (this.objectCache)
+         this.cacheLock.EnterReadLock();
+         try
+         {
+            // Check for existence so we can return fast without write-locking.
+            if (this.objectCache.TryGetValue(file, out exports))
+               return exports;
+         }
+         finally
+         {
+            this.cacheLock.ExitReadLock();
+         }
+
+         this.cacheLock.EnterWriteLock();
+         try
          {
             // Check for existence again after locking.
-            if (this.objectCache.ContainsKey(file))
-               return this.objectCache[file];
+            if (this.objectCache.TryGetValue(file, out exports))
+               return exports;
 
             string fileName = String.Concat(file, ".js");
             string code = this.resourceHelper.Get(fileName);
 
             // Allocate a new object for the exports of the require, and add it preemptively, to allow for reentrancy.
-            var exports = new CommonObject(this.context.Environment, this.context.Environment.Prototypes.Object);
+            exports = new CommonObject(this.context.Environment, this.context.Environment.Prototypes.Object);
             this.objectCache.Add(file, exports);
 
             // Populate the exports object.
             Execute(file, code, exports);
 
             return exports;
+         }
+         finally
+         {
+            this.cacheLock.ExitWriteLock();
          }
       }
    }
