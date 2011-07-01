@@ -35,6 +35,7 @@ namespace Uglify
          this.resourceHelper = resourceHelper;
          this.objectCache = new Dictionary<string, CommonObject>();
          this.require = Utils.CreateFunction<Func<string, CommonObject>>(this.context.Environment, 1, RequireInternal);
+         this.context.SetGlobal("require", this.require);
       }
 
 

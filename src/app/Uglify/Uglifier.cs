@@ -101,13 +101,6 @@ namespace Uglify
          context.Execute("String.prototype.substr = String.prototype.substring;");
          var requirer = new Requirer(context, resourceHelper);
 
-         // Debug.registerConsolePrinter();
-         // IronJS.Support.Debug.registerAstPrinter(AstPrinter);
-         // IronJS.Support.Debug.registerExprPrinter(ExprPrinter);
-
-         context.SetGlobal("require", requirer.Require);
-         context.SetGlobal("require", requirer.Require);
-
          return context;
       }
    }
