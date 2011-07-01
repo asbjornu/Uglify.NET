@@ -2,7 +2,6 @@ using System;
 
 using IronJS;
 using IronJS.Hosting;
-using IronJS.Support;
 
 namespace Uglify
 {
@@ -31,23 +30,14 @@ namespace Uglify
       /// Uglifies the specified code.
       /// </summary>
       /// <param name="code">The JavaScript code that is to be uglified.</param>
+      /// <param name="options">The options.</param>
       /// <returns>
       /// The uglified code.
       /// </returns>
-      public string Uglify(string code)
-      {
-         return Uglify(code, "");
-      }
-
-
-      /// <summary>
-      /// Uglifies the specified code.
-      /// </summary>
-      /// <param name="code">The JavaScript code that is to be uglified.</param>
-      /// <returns>
-      /// The uglified code.
-      /// </returns>
-      public string Uglify(string code, string options)
+      public string Uglify(
+         string code,
+         // TODO: The options can probably be made into a neat little object, figure out how. [asbjornu]
+         string options = "")
       {
          if (code == null)
             throw new ArgumentNullException("code");
@@ -61,29 +51,8 @@ namespace Uglify
          {
             Console.WriteLine(error.Message);
          }
+
          return null;
-      }
-
-
-      private void LoadUglify()
-      {
-         string uglifyCode = this.resourceHelper.Get("uglify-js.js");
-
-         const string defineModule = "var module = {};";
-         this.context.Execute(defineModule + uglifyCode);
-         this.uglify = this.context.GetGlobalAs<FunctionObject>("uglify");
-      }
-
-
-      private void ExprPrinter(string value)
-      {
-         Console.Write(value);
-      }
-
-
-      private void AstPrinter(string value)
-      {
-         Console.Write(value);
       }
 
 
@@ -97,11 +66,37 @@ namespace Uglify
       private static CSharp.Context SetupContext(ResourceHelper resourceHelper)
       {
          var context = new CSharp.Context();
+
          context.CreatePrintFunction();
          context.Execute("String.prototype.substr = String.prototype.substring;");
+
          var requirer = new Requirer(context, resourceHelper);
 
+         requirer.Define();
+
          return context;
+      }
+
+
+      private void AstPrinter(string value)
+      {
+         Console.Write(value);
+      }
+
+
+      private void ExprPrinter(string value)
+      {
+         Console.Write(value);
+      }
+
+
+      private void LoadUglify()
+      {
+         string uglifyCode = this.resourceHelper.Get("uglify-js.js");
+
+         const string defineModule = "var module = {};";
+         this.context.Execute(defineModule + uglifyCode);
+         this.uglify = this.context.GetGlobalAs<FunctionObject>("uglify");
       }
    }
 }

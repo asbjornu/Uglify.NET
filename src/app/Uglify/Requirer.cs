@@ -13,10 +13,10 @@ namespace Uglify
    /// </summary>
    internal class Requirer
    {
-      private readonly CSharp.Context context;
-      private readonly IDictionary<string, CommonObject> objectCache;
       private readonly ReaderWriterLockSlim cacheLock;
+      private readonly CSharp.Context context;
       private readonly FunctionObject require;
+      private readonly IDictionary<string, CommonObject> requireCache;
       private readonly ResourceHelper resourceHelper;
 
 
@@ -35,19 +35,18 @@ namespace Uglify
 
          this.context = context;
          this.resourceHelper = resourceHelper;
-         this.objectCache = new Dictionary<string, CommonObject>();
+         this.requireCache = new Dictionary<string, CommonObject>();
          this.cacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-         this.require = Utils.CreateFunction<Func<string, CommonObject>>(this.context.Environment, 1, RequireInternal);
-         this.context.SetGlobal("require", this.require);
+         this.require = Utils.CreateFunction<Func<string, CommonObject>>(this.context.Environment, 1, Require);
       }
 
 
       /// <summary>
-      /// Gets the require() function.
+      /// Defines the require() function as a global in the current context.
       /// </summary>
-      public FunctionObject Require
+      public void Define()
       {
-         get { return this.require; }
+         this.context.SetGlobal("require", this.require);
       }
 
 
@@ -71,10 +70,10 @@ namespace Uglify
          try
          {
             // Wrap the required code in its own function.
-            var require = this.context.Execute<FunctionObject>("function (exports) {\n" + code + "\n}");
+            var requiredResult = this.context.Execute<FunctionObject>("function (exports) {\n" + code + "\n}");
 
             // Call the required code, passing in the new exports function to be populated.
-            require.Call(this.context.Globals, exports);
+            requiredResult.Call(this.context.Globals, exports);
          }
          catch (Exception exception)
          {
@@ -83,7 +82,7 @@ namespace Uglify
       }
 
 
-      private CommonObject RequireInternal(string file)
+      private CommonObject Require(string file)
       {
          if (String.IsNullOrEmpty(file))
             throw new ArgumentNullException("file");
@@ -93,10 +92,11 @@ namespace Uglify
          CommonObject exports;
 
          this.cacheLock.EnterReadLock();
+
          try
          {
             // Check for existence so we can return fast without write-locking.
-            if (this.objectCache.TryGetValue(file, out exports))
+            if (this.requireCache.TryGetValue(file, out exports))
                return exports;
          }
          finally
@@ -105,10 +105,11 @@ namespace Uglify
          }
 
          this.cacheLock.EnterWriteLock();
+
          try
          {
             // Check for existence again after locking.
-            if (this.objectCache.TryGetValue(file, out exports))
+            if (this.requireCache.TryGetValue(file, out exports))
                return exports;
 
             string fileName = String.Concat(file, ".js");
@@ -116,7 +117,7 @@ namespace Uglify
 
             // Allocate a new object for the exports of the require, and add it preemptively, to allow for reentrancy.
             exports = new CommonObject(this.context.Environment, this.context.Environment.Prototypes.Object);
-            this.objectCache.Add(file, exports);
+            this.requireCache.Add(file, exports);
 
             // Populate the exports object.
             Execute(file, code, exports);
