@@ -98,6 +98,7 @@ namespace Uglify
       {
          var context = new CSharp.Context();
          context.CreatePrintFunction();
+         context.Execute("String.prototype.substr = String.prototype.substring;");
          var requirer = new Requirer(context, resourceHelper);
 
          // Debug.registerConsolePrinter();
