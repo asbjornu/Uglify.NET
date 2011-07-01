@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 using IronJS;
 using IronJS.Hosting;
@@ -14,6 +15,7 @@ namespace Uglify
    {
       private readonly CSharp.Context context;
       private readonly IDictionary<string, CommonObject> objectCache;
+      private readonly ReaderWriterLockSlim cacheLock;
       private readonly FunctionObject require;
       private readonly ResourceHelper resourceHelper;
 
@@ -34,8 +36,9 @@ namespace Uglify
          this.context = context;
          this.resourceHelper = resourceHelper;
          this.objectCache = new Dictionary<string, CommonObject>();
-         this.require = Utils.createHostFunction<Func<string, CommonObject>>(
-            this.context.Environment, RequireInternal);
+         this.cacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+         this.require = Utils.CreateFunction<Func<string, CommonObject>>(this.context.Environment, 1, RequireInternal);
+         this.context.SetGlobal("require", this.require);
       }
 
 
@@ -63,11 +66,15 @@ namespace Uglify
       }
 
 
-      private CommonObject Execute(string file, string code)
+      private void Execute(string file, string code, CommonObject exports)
       {
          try
          {
-            return this.context.Execute<CommonObject>(code);
+            // Wrap the required code in its own function.
+            var require = this.context.Execute<FunctionObject>("function (exports) {\n" + code + "\n}");
+
+            // Call the required code, passing in the new exports function to be populated.
+            require.Call(this.context.Globals, exports);
          }
          catch (Exception exception)
          {
@@ -83,33 +90,42 @@ namespace Uglify
 
          file = Normalize(file);
 
-         // Check for existence so we can return fast without locking.
-         if (this.objectCache.ContainsKey(file))
-            return this.objectCache[file];
+         CommonObject exports;
 
-         // Lock to make thread-safe.
-         lock (this.objectCache)
+         this.cacheLock.EnterReadLock();
+         try
+         {
+            // Check for existence so we can return fast without write-locking.
+            if (this.objectCache.TryGetValue(file, out exports))
+               return exports;
+         }
+         finally
+         {
+            this.cacheLock.ExitReadLock();
+         }
+
+         this.cacheLock.EnterWriteLock();
+         try
          {
             // Check for existence again after locking.
-            if (this.objectCache.ContainsKey(file))
-               return this.objectCache[file];
+            if (this.objectCache.TryGetValue(file, out exports))
+               return exports;
 
             string fileName = String.Concat(file, ".js");
             string code = this.resourceHelper.Get(fileName);
 
-            code = String.Concat(
-               @"// Define a 'substr' alias for 'substring' that parse-js is dependent on.
-               String.prototype.substr = String.prototype.substring;
+            // Allocate a new object for the exports of the require, and add it preemptively, to allow for reentrancy.
+            exports = new CommonObject(this.context.Environment, this.context.Environment.Prototypes.Object);
+            this.objectCache.Add(file, exports);
 
-               // Define the exports variable.
-               var exports = {};",
-               code,
-               // End the whole thing with a semicolon, just to be safe.
-               "exports;");
+            // Populate the exports object.
+            Execute(file, code, exports);
 
-            var result = Execute(file, code);
-            this.objectCache.Add(file, result);
-            return result;
+            return exports;
+         }
+         finally
+         {
+            this.cacheLock.ExitWriteLock();
          }
       }
    }
