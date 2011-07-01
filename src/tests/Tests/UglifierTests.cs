@@ -18,11 +18,11 @@ namespace Uglify.Tests
       private Uglifier uglifier;
 
 
-      [Test(Description = "This doesn't work quite yet.")]
+      [Test]
       public void Uglify_ReturnsUglifiedCode()
       {
          // TODO: Find verbose and complicated code to uglify.
-         this.uglifier.Uglify("var x = { };");
+         this.uglifier.Uglify("(function(){ var x = 'hello world'; }();");
       }
    }
 }

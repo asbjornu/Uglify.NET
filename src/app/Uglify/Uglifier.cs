@@ -12,7 +12,7 @@ namespace Uglify
    {
       private readonly CSharp.Context context;
       private readonly ResourceHelper resourceHelper;
-      private FunctionObject uglify;
+      private readonly FunctionObject uglify;
 
 
       /// <summary>
@@ -22,7 +22,7 @@ namespace Uglify
       {
          this.resourceHelper = new ResourceHelper();
          this.context = SetupContext(this.resourceHelper);
-         LoadUglify();
+         this.uglify = LoadUglify(this.context, this.resourceHelper);
       }
 
 
@@ -49,10 +49,19 @@ namespace Uglify
          }
          catch (Error.Error error)
          {
-            Console.WriteLine(error.Message);
-         }
+            throw new UglifyException(code, error);
+         }  
+      }
 
-         return null;
+
+      private static FunctionObject LoadUglify(CSharp.Context context, ResourceHelper resourceHelper)
+      {
+         const string defineModule = "var module = {};";
+
+         string uglifyCode = resourceHelper.Get("uglify-js.js");
+         context.Execute(String.Concat(defineModule, uglifyCode));
+
+         return context.GetGlobalAs<FunctionObject>("uglify");
       }
 
 
@@ -87,16 +96,6 @@ namespace Uglify
       private void ExprPrinter(string value)
       {
          Console.Write(value);
-      }
-
-
-      private void LoadUglify()
-      {
-         string uglifyCode = this.resourceHelper.Get("uglify-js.js");
-
-         const string defineModule = "var module = {};";
-         this.context.Execute(defineModule + uglifyCode);
-         this.uglify = this.context.GetGlobalAs<FunctionObject>("uglify");
       }
    }
 }

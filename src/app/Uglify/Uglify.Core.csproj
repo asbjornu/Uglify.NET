@@ -47,6 +47,7 @@
     <Compile Include="Requirer.cs" />
     <Compile Include="ResourceHelper.cs" />
     <Compile Include="Uglifier.cs" />
+    <Compile Include="UglifyException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\..\lib\UglifyJS\lib\parse-js.js">
