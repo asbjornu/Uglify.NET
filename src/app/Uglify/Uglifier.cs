@@ -47,7 +47,7 @@ namespace Uglify
             BoxedValue boxedResult = this.uglify.Call(this.context.Globals, code, options);
             return TypeConverter.ToString(boxedResult);
          }
-         catch (Error.Error error)
+         catch (UserError error)
          {
             throw new UglifyException(code, error);
          }  
