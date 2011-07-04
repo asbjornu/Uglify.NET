@@ -1206,31 +1206,33 @@
 
 </member>
 <member name="M:IronJS.FunctionMetaData.GetDelegate``1(IronJS.FunctionObject)">
-<summary>
+ <summary>
  Retrieves and already compiled delegate for the current
  function, or compiles a new one if there is needed.
-</summary>
+ </summary>
 </member>
 <member name="M:IronJS.FunctionMetaData.GetDelegate(IronJS.FunctionObject,System.Type)">
 
 </member>
 <member name="M:IronJS.FunctionMetaData.#ctor(System.UInt64,IronJS.FunctionType,Microsoft.FSharp.Core.FSharpFunc`2{IronJS.FunctionObject,Microsoft.FSharp.Core.FSharpFunc`2{System.Type,System.Delegate}})">
-<summary>
- This constructor is for host functions, which we don&apos;t
+ <summary>
+ This constructor is for host functions, which we don't
  need parameter storage information about.
-</summary>
+ </summary>
 </member>
 <member name="M:IronJS.FunctionMetaData.#ctor(System.UInt64,Microsoft.FSharp.Core.FSharpFunc`2{IronJS.FunctionObject,Microsoft.FSharp.Core.FSharpFunc`2{System.Type,System.Delegate}},System.Tuple`2{IronJS.ParameterStorageType,System.Int32}[])">
-<summary>
+ <summary>
  This constructor is for user functions, which we know
  always have ConstructorMode.User.
-</summary>
+ </summary>
 </member>
 <member name="">
 
 </member>
 <member name="T:IronJS.FunctionMetaData">
-
+ <summary>
+ The class that contains the metadata that describes a <see cref="FunctionObject"/>.
+ </summary>
 </member>
 <member name="">
 
@@ -1244,77 +1246,175 @@
 <member name="">
 
 </member>
-<member name="">
-
+<member name="P:IronJS.FunctionObject.Name">
+ <summary>
+ Gets the name of the function.
+ </summary>
+</member>
+<member name="P:IronJS.FunctionObject.InstancePrototype">
+ <summary>
+ Gets the prototype object the instance of the function this <see cref="FunctionObject"/> represents.
+ </summary>
+</member>
+<member name="P:IronJS.FunctionObject.ClassName">
+ <summary>
+ Gets the name of the object class.
+ </summary>
+</member>
+<member name="M:IronJS.FunctionObject.TryInvoke(System.Dynamic.InvokeBinder,System.Object[],System.Object@)">
+ <summary>
+ Tries to invoke the function bound by the <paramref name="binder"/> with the
+ arguments specified in <paramref name="args"/>.
+ </summary>
+ <param name="binder">The <see cref="InvokeBinder"/> that is bound to the function which is to be invoked.</param>
+ <param name="binder">The object array to pass to the function.</param>
+ <param name="result">The result returned from the function invokation.</param>
+ <returns><c>true</c> if the function invokation succeeded; otherwise <c>false</c>.</returns>
 </member>
 <member name="">
 
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.NewInstance">
+ <summary>
+ Initializes a new instance of the JavaScript function this <see cref="FunctionObject"/> represents.
+ </summary>
+ <returns>The <see cref="CommonObject"/> representing the JavaScript object of the function.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.HasInstance(IronJS.CommonObject)">
+ <summary>
+ Checks whether the JavaScript function this <see cref="FunctionObject"/> represents is an instance of <paramref name="v"/>.
+ </summary>
+ <param name="v">The object the JavaScript function this <see cref="FunctionObject"/> represents should be an instance of.</param>
+ <returns><c>true</c> if the JavaScript function this <see cref="FunctionObject"/> represents is an instance of <paramref name="v"/>; otherwise <c>false</c>.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Construct(IronJS.BoxedValue[])">
+ <summary>
+ Calls the constructor on the JavaScript function represented by the <see cref="FunctionObject"/>.
+ </summary>
+ <param name="args">The unbound list of arguments passed to the constructor.</param>
+ <returns>The <see cref="BoxedValue"/> result of the constructor call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Construct``4(``0,``1,``2,``3)">
+ <summary>
+ Calls the constructor on the JavaScript function represented by the <see cref="FunctionObject"/>.
+ </summary>
+ <param name="a">The first argument passed to the constructor.</param>
+ <param name="b">The second argument passed to the constructor.</param>
+ <param name="c">The third argument passed to the constructor.</param>
+ <param name="d">The fourth argument passed to the constructor.</param>
+ <returns>The <see cref="BoxedValue"/> result of the constructor call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Construct``3(``0,``1,``2)">
+ <summary>
+ Calls the constructor on the JavaScript function represented by the <see cref="FunctionObject"/>.
+ </summary>
+ <param name="a">The first argument passed to the constructor.</param>
+ <param name="b">The second argument passed to the constructor.</param>
+ <param name="c">The third argument passed to the constructor.</param>
+ <returns>The <see cref="BoxedValue"/> result of the constructor call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Construct``2(``0,``1)">
+ <summary>
+ Calls the constructor on the JavaScript function represented by the <see cref="FunctionObject"/>.
+ </summary>
+ <param name="a">The first argument passed to the constructor.</param>
+ <param name="b">The second argument passed to the constructor.</param>
+ <returns>The <see cref="BoxedValue"/> result of the constructor call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Construct``1(``0)">
+ <summary>
+ Calls the constructor on the JavaScript function represented by the <see cref="FunctionObject"/>.
+ </summary>
+ <param name="a">The first argument passed to the constructor.</param>
+ <returns>The <see cref="BoxedValue"/> result of the constructor call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Construct">
+ <summary>
+ Calls the constructor on the JavaScript function represented by the <see cref="FunctionObject"/>.
+ </summary>
+ <returns>The <see cref="BoxedValue"/> result of the constructor call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Call(IronJS.CommonObject,IronJS.BoxedValue[])">
+ <summary>
+ Calls the function with the given <paramref name="this"/> context.
+ </summary>
+ <param name="this">The context for <c>this</c> in the invoked function.</param>
+ <param name="args">The unbound list of arguments passed to the function.</param>
+ <returns>The <see cref="BoxedValue"/> result of the function call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Call``4(IronJS.CommonObject,``0,``1,``2,``3)">
+ <summary>
+ Calls the function with the given <paramref name="this"/> context.
+ </summary>
+ <param name="this">The context for <c>this</c> in the invoked function.</param>
+ <param name="a">The first argument passed to the function.</param>
+ <param name="b">The second argument passed to the function.</param>
+ <param name="c">The third argument passed to the function.</param>
+ <param name="d">The fourth argument passed to the function.</param>
+ <returns>The <see cref="BoxedValue"/> result of the function call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Call``3(IronJS.CommonObject,``0,``1,``2)">
+ <summary>
+ Calls the function with the given <paramref name="this"/> context.
+ </summary>
+ <param name="this">The context for <c>this</c> in the invoked function.</param>
+ <param name="a">The first argument passed to the function.</param>
+ <param name="b">The second argument passed to the function.</param>
+ <param name="c">The third argument passed to the function.</param>
+ <returns>The <see cref="BoxedValue"/> result of the function call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Call``2(IronJS.CommonObject,``0,``1)">
+ <summary>
+ Calls the function with the given <paramref name="this"/> context.
+ </summary>
+ <param name="this">The context for <c>this</c> in the invoked function.</param>
+ <param name="a">The first argument passed to the function.</param>
+ <param name="b">The second argument passed to the function.</param>
+ <returns>The <see cref="BoxedValue"/> result of the function call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Call``1(IronJS.CommonObject,``0)">
+ <summary>
+ Calls the function with the given <paramref name="this"/> context.
+ </summary>
+ <param name="this">The context for <c>this</c> in the invoked function.</param>
+ <param name="a">The first argument passed to the function.</param>
+ <returns>The <see cref="BoxedValue"/> result of the function call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.Call(IronJS.CommonObject)">
+ <summary>
+ Calls the function with the given <paramref name="this"/> context.
+ </summary>
+ <param name="this">The context for <c>this</c> in the invoked function.</param>
+ <returns>The <see cref="BoxedValue"/> result of the function call.</returns>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.#ctor(IronJS.Environment)">
+ <summary>
+ Initializes a new instance of the <see cref="FunctionObject"/> class.
+ </summary>
+ <param name="env">The <see cref="Environment"/> the function is to exist within.</param>
 </member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.#ctor(IronJS.Environment,IronJS.FunctionMetaData,IronJS.Schema)">
+ <summary>
+ Initializes a new instance of the <see cref="FunctionObject"/> class.
+ </summary>
+ <param name="env">The <see cref="Environment"/> the function is to exist within.</param>
+ <param name="metaData">The <see cref="FunctionMetaData"/> that describes the function.</param>
+ <param name="propertyMap">The <see cref="Schema"/> that contains the function's properties.</param>
 </member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
+<member name="M:IronJS.FunctionObject.#ctor(IronJS.Environment,System.UInt64,IronJS.BoxedValue[],Microsoft.FSharp.Collections.FSharpList{System.Tuple`2{System.Int32,IronJS.CommonObject}})">
+ <summary>
+ Initializes a new instance of the <see cref="FunctionObject"/> class.
+ </summary>
+ <param name="env">The <see cref="Environment"/> the function is to exist within.</param>
+ <param name="closureScope">The closure scope the function is enclosed in.</param>
+ <param name="dynamicScope">The dynamic scope the function is enclosed in.</param>
 </member>
 <member name="T:IronJS.FunctionObject">
-<summary>
+ <summary>
  Type that is used for representing objects that also
- support the [[Call]] and [[Construct]] functions
-</summary>
+ support the <see cref="M:FunctionObject.Call"/> and
+ <see cref="M:FunctionObject.Construct"/> functions
+ </summary>
 </member>
 <member name="">
 
