@@ -35,8 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IronJS, Version=0.2.1.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\..\..\lib\IronJS\x64\IronJS.dll</HintPath>
+    <Reference Include="IronJS">
+      <HintPath>..\..\..\lib\IronJS\IronJS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

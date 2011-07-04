@@ -9,9 +9,9 @@ using IronJS.Native;
 namespace Uglify
 {
    /// <summary>
-   /// The class that implements node's require() function.
+   /// The class that implements node's <c>require()</c> function.
    /// </summary>
-   internal class Requirer
+   internal class RequireDefinition
    {
       private readonly ReaderWriterLockSlim cacheLock;
       private readonly CSharp.Context context;
@@ -21,11 +21,11 @@ namespace Uglify
 
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="Requirer"/> class.
+      /// Initializes a new instance of the <see cref="RequireDefinition"/> class.
       /// </summary>
       /// <param name="context">The context.</param>
       /// <param name="resourceHelper">The resource helper.</param>
-      public Requirer(CSharp.Context context, ResourceHelper resourceHelper)
+      public RequireDefinition(CSharp.Context context, ResourceHelper resourceHelper)
       {
          if (context == null)
             throw new ArgumentNullException("context");

@@ -62,7 +62,7 @@
 <member name="">
 
 </member>
-<member name="F:IronJS.IronJS.ArrayObject.length@1287">
+<member name="F:IronJS.IronJS.ArrayObject.length@1360">
 <summary>
  Internal length property
 </summary>
@@ -354,7 +354,25 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="M:IronJS.CommonObject.TryCastTo``1(``0@)">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
 
 </member>
 <member name="">
@@ -1289,6 +1307,9 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
 <member name="T:IronJS.FunctionObject">
 <summary>
  Type that is used for representing objects that also
@@ -2002,6 +2023,9 @@
 
 </member>
 <member name="T:IronJS.Undef">
+
+</member>
+<member name="">
 
 </member>
 <member name="">
@@ -6939,6 +6963,11 @@
 </member>
 <member name="M:IronJS.Native.String.Prototype.toLowerCase(IronJS.FunctionObject,IronJS.CommonObject)">
 
+</member>
+<member name="M:IronJS.Native.String.Prototype.substr(IronJS.FunctionObject,IronJS.CommonObject,IronJS.BoxedValue,IronJS.BoxedValue)">
+<summary>
+ These steps are outlined in the ECMA-262, Appendix B.1.2
+</summary>
 </member>
 <member name="M:IronJS.Native.String.Prototype.substring(IronJS.FunctionObject,IronJS.CommonObject,System.Double,IronJS.BoxedValue)">
 <summary>

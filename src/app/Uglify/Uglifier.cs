@@ -2,7 +2,6 @@ using System;
 
 using IronJS;
 using IronJS.Hosting;
-using IronJS.Native;
 
 namespace Uglify
 {
@@ -66,47 +65,19 @@ namespace Uglify
       }
 
 
-      /// <summary>
-      /// Sets up the context.
-      /// </summary>
-      /// <param name="resourceHelper">The resource helper.</param>
-      /// <returns>
-      /// The context.
-      /// </returns>
       private static CSharp.Context SetupContext(ResourceHelper resourceHelper)
       {
          var context = new CSharp.Context();
 
          context.CreatePrintFunction();
 
-         var substr = Utils.CreateFunction<Func<FunctionObject, CommonObject, double, double, CommonObject>>(
-            context.Environment, 1, Substr);
-
-         context.Environment.Prototypes.String.Put("substr", substr);
-
-         var requirer = new Requirer(context, resourceHelper);
-
-         requirer.Define();
+         var require = new RequireDefinition(context, resourceHelper);
+         require.Define();
 
          return context;
       }
 
 
-      private static CommonObject Substr(
-         FunctionObject function, CommonObject stringObject, double startIndex, double length)
-      {
-         string stringValue = TypeConverter.ToString(stringObject);
-
-         if (!String.IsNullOrEmpty(stringValue))
-         {
-            // CLI's System.String.Substring should be equivalent to JavaScript's String.prototype.substr
-            stringValue = stringValue.Substring(
-               // For some reason, IronJS passes integers as doubles, so we need to cast them here
-               (int)startIndex, (int)length);
-         }
-
-         return TypeConverter.ToObject(function.Env, stringValue);
-      }
 
 
       private void AstPrinter(string value)
